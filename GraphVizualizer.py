@@ -50,8 +50,8 @@ class GraphGUI:
         self.percorrerV_button = tk.Button(master, text="Percorrer Vertice", command=self.percorrer_vertice)
         self.percorrerV_button.pack(padx = 2, pady = 1, expand = False, fill = "both")
 
-        self.save_button = tk.Button(master, text="Percorrer Aresta", command=self.save_graph)
-        self.save_button.pack(padx = 2, pady = 1, expand = False, fill = "both")
+        self.percorrerA_button = tk.Button(master, text="Percorrer Aresta", command=self.percorrer_aresta)
+        self.percorrerA_button.pack(padx = 2, pady = 1, expand = False, fill = "both")
 
         self.draw_graph()
 
@@ -86,7 +86,21 @@ class GraphGUI:
             self.canvas_ntk.draw()
             self.master.update_idletasks()
             time.sleep(1)
-            
+
+    def percorrer_aresta(self):
+        for edgeor, edgedes in self.graph.edges:
+            color_map = []
+            for edgeorAlt, edgedesAlt in self.graph.edges:
+                if (edgeor, edgedes) == (edgeorAlt, edgedesAlt):
+                    color_map.append('red')
+                else:
+                    color_map.append('black') 
+            self.ax.clear()
+            pos = nx.planar_layout(self.graph)
+            nx.draw(self.graph, pos, ax=self.ax, with_labels=True, node_size=500, edge_color=color_map, node_color='skyblue')
+            self.canvas_ntk.draw()
+            self.master.update_idletasks()
+            time.sleep(1)
 
     def add_edge(self):
         origin = self.edge_origin_entry.get()
