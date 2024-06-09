@@ -52,15 +52,22 @@ class GraphGUI:
 
         self.percorrerA_button = tk.Button(master, text="Percorrer Aresta", command=self.percorrer_aresta)
         self.percorrerA_button.pack(padx = 2, pady = 1, expand = False, fill = "both")
+        
+        self.log_texto = tk.Text(master, width=40, height=15, state="disabled")
+        self.log_texto.pack(padx = 2, pady = 1, expand = True, fill = "both")
 
         self.draw_graph()
 
     def add_vertex(self):
         vertex = self.add_entry.get()
         if vertex:
-            self.graph.add_node(vertex)
-            self.draw_graph()
-            self.add_entry.delete(0, tk.END)
+            if vertex in self.graph.nodes():
+                self.printLog(f'Vértice {vertex} já adicionado.')
+            else:
+                self.graph.add_node(vertex)
+                self.draw_graph()
+                self.add_entry.delete(0, tk.END)
+                self.printLog(f'Vértice {vertex} adicionado com sucesso.')
 
     def remove_vertex(self):
         vertex = self.remove_entry.get()
@@ -68,11 +75,13 @@ class GraphGUI:
             if vertex in self.graph.nodes():
                 self.graph.remove_node(vertex)
                 self.draw_graph()
+                self.printLog(f'Vértice {vertex} apagado com sucesso.')
             else:
-                print("Vértice não encontrado.")
+                self.printLog('Vértice não encontrado.')
             self.remove_entry.delete(0, tk.END)
 
     def percorrer_vertice(self):
+        self.printLog('')
         for node in self.graph.nodes:
             color_map = []
             for nodeAlt in self.graph.nodes:
@@ -83,11 +92,13 @@ class GraphGUI:
             self.ax.clear()
             pos = nx.planar_layout(self.graph)
             nx.draw(self.graph, pos, ax=self.ax, with_labels=True, node_size=500, node_color=color_map)
+            self.printLog(f'Vertice {node}')
             self.canvas_ntk.draw()
             self.master.update_idletasks()
             time.sleep(1)
 
     def percorrer_aresta(self):
+        self.printLog('')
         for edgeor, edgedes in self.graph.edges:
             color_map = []
             for edgeorAlt, edgedesAlt in self.graph.edges:
@@ -97,6 +108,7 @@ class GraphGUI:
                     color_map.append('black') 
             self.ax.clear()
             pos = nx.planar_layout(self.graph)
+            self.printLog(f'Arésta {edgeor} <--> {edgedes}')
             nx.draw(self.graph, pos, ax=self.ax, with_labels=True, node_size=500, edge_color=color_map, node_color='skyblue')
             self.canvas_ntk.draw()
             self.master.update_idletasks()
@@ -110,6 +122,7 @@ class GraphGUI:
             self.draw_graph()
             self.edge_origin_entry.delete(0, tk.END)
             self.edge_dest_entry.delete(0, tk.END)
+            self.printLog(f'Arésta {origin} <--> {dest} criada com sucesso.')
 
     def load_graph(self):
         filename = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
@@ -117,18 +130,27 @@ class GraphGUI:
             df = pd.read_csv(filename)
             self.graph = nx.from_pandas_edgelist(df)
             self.draw_graph()
+            self.printLog(f'Grafo carregado com sucesso.')
+        else:
+            self.printLog(f'Arquivo desconhecido ou não encontrado.')
 
     def save_graph(self):
         filename = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
         if filename:
             df = nx.to_pandas_edgelist(self.graph)
             df.to_csv(filename, index=False)
+            self.printLog(f'Grafo salvo com sucesso.')
 
     def draw_graph(self):
         self.ax.clear()
         pos = nx.planar_layout(self.graph)
         nx.draw(self.graph, pos, ax=self.ax, with_labels=True, node_size=500, node_color='skyblue')
         self.canvas_ntk.draw()
+
+    def printLog(self, texto):
+        self.log_texto.config(state='normal')
+        self.log_texto.insert(tk.END, texto + "\n")
+        self.log_texto.config(state='disabled')
 
 
 def main():
