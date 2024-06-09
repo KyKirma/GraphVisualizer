@@ -26,7 +26,6 @@ class GraphGUI:
 
         self.verticeLabel = tk.Label(self.verticeDiv, text="Vértice")
         self.verticeLabel.pack(padx = 5, pady = 1, expand = False, fill = "x")
-
         self.verticeEntry = tk.Entry(self.verticeDiv, justify='center')
         self.verticeEntry.pack(padx = 5, pady = 1, expand = False, fill = "both")
 
@@ -39,14 +38,24 @@ class GraphGUI:
         self.remove_button.pack(side="left", expand = True, padx=5, pady=5, fill = "both")
         #=========================================================================
 
-        self.edge_label = tk.Label(master, text="Aresta (Origem-Destino):")
+        #===========================  Arestas  ===================================
+        self.arestaDiv = tk.Frame(master)
+        self.arestaDiv.pack(expand = False, fill = "both")
+
+        self.edge_label = tk.Label(self.arestaDiv, text="Aresta (Origem-Destino)")
         self.edge_label.pack(padx = 5, pady = 1, expand = False, fill = "both")
-        self.edge_origin_entry = tk.Entry(master)
-        self.edge_origin_entry.pack(padx = 5, pady = 1, expand = False, fill = "both")
-        self.edge_dest_entry = tk.Entry(master)
-        self.edge_dest_entry.pack(padx = 5, pady = 1, expand = False, fill = "both")
-        self.edge_button = tk.Button(master, text="Adicionar Aresta", command=self.add_edge)
-        self.edge_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
+
+        self.arestaEntry = tk.Frame(self.arestaDiv)
+        self.arestaEntry.pack(expand = False, fill = "x")
+
+        self.edge_origin_entry = tk.Entry(self.arestaEntry, justify='center')
+        self.edge_origin_entry.pack(side="left", expand = True, padx = 5, pady = 1, fill = "both")
+        self.edge_dest_entry = tk.Entry(self.arestaEntry, justify='center')
+        self.edge_dest_entry.pack(side="left", expand = True, padx = 5, pady = 1, fill = "both")
+
+        self.edge_button = tk.Button(self.arestaDiv, text="Adicionar Aresta", command=self.add_edge)
+        self.edge_button.pack(expand = False, padx = 5, pady = 5, fill = "both")
+        #=========================================================================
 
         self.load_button = tk.Button(master, text="Carregar Grafo", command=self.load_graph)
         self.load_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
@@ -115,8 +124,8 @@ class GraphGUI:
                     color_map.append('black') 
             self.ax.clear()
             pos = nx.planar_layout(self.graph)
-            self.printLog(f'Arésta {edgeor} <--> {edgedes}')
             nx.draw(self.graph, pos, ax=self.ax, with_labels=True, node_size=500, edge_color=color_map, node_color='skyblue')
+            self.printLog(f'Arésta {edgeor} <--> {edgedes}')
             self.canvas_ntk.draw()
             self.master.update_idletasks()
             time.sleep(1)
