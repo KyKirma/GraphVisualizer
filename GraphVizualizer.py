@@ -5,6 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 from tkinter import filedialog
 import time
+import tkinter.font as tkFont
 
 class GraphGUI:
     def __init__(self, master):
@@ -12,6 +13,9 @@ class GraphGUI:
         self.master.title("Graph Editor")
         self.master.minsize(800, 400)
         self.graph = nx.Graph()
+
+        default_font = tkFont.Font(family="Arial", size=10, weight="normal", slant="roman")
+        title_font = tkFont.Font(family="Arial", size=12, weight="normal", slant="roman")
 
         #===========================  Canvas  ===================================
         self.figure = plt.figure()
@@ -24,7 +28,7 @@ class GraphGUI:
         self.verticeDiv = tk.Frame(master)
         self.verticeDiv.pack(expand = False, fill = "both")
 
-        self.verticeLabel = tk.Label(self.verticeDiv, text="Vértice")
+        self.verticeLabel = tk.Label(self.verticeDiv, text="Vértice", font = title_font)
         self.verticeLabel.pack(padx = 5, pady = 1, expand = False, fill = "x")
         self.verticeEntry = tk.Entry(self.verticeDiv, justify='center')
         self.verticeEntry.pack(padx = 5, pady = 1, expand = False, fill = "both")
@@ -32,9 +36,9 @@ class GraphGUI:
         self.verticeButtons = tk.Frame(self.verticeDiv)
         self.verticeButtons.pack(expand = False, fill = "x")
 
-        self.add_button = tk.Button(self.verticeButtons, text="Adicionar", command=self.add_vertex)
+        self.add_button = tk.Button(self.verticeButtons, text="Adicionar", command=self.add_vertex, font = default_font)
         self.add_button.pack(side="left", expand = True, padx=5, pady=5, fill = "both") 
-        self.remove_button = tk.Button(self.verticeButtons, text="Remover", command=self.remove_vertex)
+        self.remove_button = tk.Button(self.verticeButtons, text="Remover", command=self.remove_vertex, font = default_font)
         self.remove_button.pack(side="left", expand = True, padx=5, pady=5, fill = "both")
         #=========================================================================
 
@@ -42,51 +46,51 @@ class GraphGUI:
         self.arestaDiv = tk.Frame(master)
         self.arestaDiv.pack(expand = False, fill = "both")
 
-        self.edge_label = tk.Label(self.arestaDiv, text="Aresta")
+        self.edge_label = tk.Label(self.arestaDiv, text="Aresta", font = title_font)
         self.edge_label.pack(padx = 5, pady = 1, expand = False, fill = "both")
 
         self.arestaEntry1 = tk.Frame(self.arestaDiv)
         self.arestaEntry1.pack(expand = False, fill = "x")
-        self.edge_origin_label = tk.Label(self.arestaEntry1, text="Origem: ")
+        self.edge_origin_label = tk.Label(self.arestaEntry1, text="Origem:", font = default_font)
         self.edge_origin_label.pack(side="left", expand = False, padx = 5, pady = 1)
         self.edge_origin_entry = tk.Entry(self.arestaEntry1, justify='center')
         self.edge_origin_entry.pack(side="left", expand = True, padx = 5, pady = 1, fill = "both")
 
         self.arestaEntry2 = tk.Frame(self.arestaDiv)
         self.arestaEntry2.pack(expand = False, fill = "x")
-        self.edge_dest_label = tk.Label(self.arestaEntry2, text="Destino: ")
+        self.edge_dest_label = tk.Label(self.arestaEntry2, text="Destino:", font = default_font)
         self.edge_dest_label.pack(side="left", expand = False, padx = 5, pady = 1)
         self.edge_dest_entry = tk.Entry(self.arestaEntry2, justify='center')
         self.edge_dest_entry.pack(side="left", expand = True, padx = 5, pady = 1, fill = "both")
 
         self.arestaEntry3 = tk.Frame(self.arestaDiv)
         self.arestaEntry3.pack(expand = False, fill = "x")
-        self.edge_origin_label = tk.Label(self.arestaEntry3, text="     Peso: ")
+        self.edge_origin_label = tk.Label(self.arestaEntry3, text="Peso:", font = default_font)
         self.edge_origin_label.pack(side="left", expand = False, padx = 5, pady = 1)
         self.edge_weight_entry = tk.Entry(self.arestaEntry3, justify='center')
         self.edge_weight_entry.pack(side="left", expand = True, padx = 5, pady = 1, fill = "both")
 
-        self.edge_button = tk.Button(self.arestaDiv, text="Adicionar Aresta", command=self.add_edge)
+        self.edge_button = tk.Button(self.arestaDiv, text="Adicionar Aresta", command=self.add_edge, font = default_font)
         self.edge_button.pack(expand = False, padx = 5, pady = 5, fill = "both")
         #=========================================================================
 
         #===========================  Save | Load  ===================================
-        self.br = tk.Label(master, text="\nSave | Load", wraplength=200)
+        self.br = tk.Label(master, text="\nSave | Load", wraplength=200, font = title_font)
         self.br.pack()
-        self.load_button = tk.Button(master, text="Carregar Grafo", command=self.load_graph)
+        self.load_button = tk.Button(master, text="Carregar Grafo", command=self.load_graph, font = default_font)
         self.load_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
 
-        self.save_button = tk.Button(master, text="Salvar Grafo", command=self.save_graph)
+        self.save_button = tk.Button(master, text="Salvar Grafo", command=self.save_graph, font = default_font)
         self.save_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
         #=========================================================================
 
         #===========================  Métodos  ===================================
-        self.br = tk.Label(master, text="\nMetodos", wraplength=200)
+        self.br = tk.Label(master, text="\nMetodos", wraplength=200, font = title_font)
         self.br.pack()
-        self.percorrerV_button = tk.Button(master, text="Percorrer Vertice", command=self.percorrer_vertice)
+        self.percorrerV_button = tk.Button(master, text="Percorrer Vertice", command=self.percorrer_vertice, font = default_font)
         self.percorrerV_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
 
-        self.percorrerA_button = tk.Button(master, text="Percorrer Aresta", command=self.percorrer_aresta)
+        self.percorrerA_button = tk.Button(master, text="Percorrer Aresta", command=self.percorrer_aresta, font = default_font)
         self.percorrerA_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
         #=========================================================================
 
@@ -116,6 +120,18 @@ class GraphGUI:
                 self.printLog('Vértice não encontrado.')
             self.verticeEntry.delete(0, tk.END)
 
+    def add_edge(self):
+        origin = self.edge_origin_entry.get()
+        dest = self.edge_dest_entry.get()
+        peso = self.edge_weight_entry.get()
+        if origin and dest and peso:
+            self.graph.add_edge(origin, dest, weight = int(peso))
+            self.draw_graph()
+            self.edge_origin_entry.delete(0, tk.END)
+            self.edge_dest_entry.delete(0, tk.END)
+            self.edge_weight_entry.delete(0, tk.END)
+            self.printLog(f'Arésta {origin} <--> {dest} criada com sucesso.')
+
     def percorrer_vertice(self):
         self.printLog('')
         for node in self.graph.nodes:
@@ -131,7 +147,7 @@ class GraphGUI:
             self.printLog(f'Vertice {node}')
             self.canvas_ntk.draw()
             self.master.update_idletasks()
-            time.sleep(1)
+            time.sleep(0.3)
 
     def percorrer_aresta(self):
         self.printLog('')
@@ -148,17 +164,8 @@ class GraphGUI:
             self.printLog(f'Arésta {edgeor} <--> {edgedes}')
             self.canvas_ntk.draw()
             self.master.update_idletasks()
-            time.sleep(1)
-
-    def add_edge(self):
-        origin = self.edge_origin_entry.get()
-        dest = self.edge_dest_entry.get()
-        if origin and dest:
-            self.graph.add_edge(origin, dest)
-            self.draw_graph()
-            self.edge_origin_entry.delete(0, tk.END)
-            self.edge_dest_entry.delete(0, tk.END)
-            self.printLog(f'Arésta {origin} <--> {dest} criada com sucesso.')
+            time.sleep(0.3)
+        print(self.graph.edges)
 
     def load_graph(self):
         filename = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
