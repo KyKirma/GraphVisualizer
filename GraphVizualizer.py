@@ -13,64 +13,71 @@ class GraphGUI:
         self.master.minsize(800, 400)
         self.graph = nx.Graph()
 
+        #===========================  Canvas  ===================================
         self.figure = plt.figure()
         self.ax = self.figure.add_subplot(111)
         self.canvas_ntk = FigureCanvasTkAgg(self.figure, master=self.master)
         self.canvas_ntk.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        #=========================================================================
 
-        self.add_label = tk.Label(master, text="Vértice:")
-        self.add_label.pack(padx = 2, pady = 1, expand = False, fill = "both")
-        self.add_entry = tk.Entry(master)
-        self.add_entry.pack(padx = 2, pady = 1, expand = False, fill = "both")
-        self.add_button = tk.Button(master, text="Adicionar Vértice", command=self.add_vertex)
-        self.add_button.pack(padx = 2, pady = 1, expand = False, fill = "both")
+        #===========================  Vértice  ===================================
+        self.verticeDiv = tk.Frame(master)
+        self.verticeDiv.pack(expand = False, fill = "both")
 
-        self.remove_label = tk.Label(master, text="Vértice a Remover:")
-        self.remove_label.pack(padx = 2, pady = 1, expand = False, fill = "both")
-        self.remove_entry = tk.Entry(master)
-        self.remove_entry.pack(padx = 2, pady = 1, expand = False, fill = "both")
-        self.remove_button = tk.Button(master, text="Remover Vértice", command=self.remove_vertex)
-        self.remove_button.pack(padx = 2, pady = 1, expand = False, fill = "both")
+        self.verticeLabel = tk.Label(self.verticeDiv, text="Vértice")
+        self.verticeLabel.pack(padx = 5, pady = 1, expand = False, fill = "x")
+
+        self.verticeEntry = tk.Entry(self.verticeDiv, justify='center')
+        self.verticeEntry.pack(padx = 5, pady = 1, expand = False, fill = "both")
+
+        self.verticeButtons = tk.Frame(self.verticeDiv)
+        self.verticeButtons.pack(expand = False, fill = "x")
+
+        self.add_button = tk.Button(self.verticeButtons, text="Adicionar", command=self.add_vertex)
+        self.add_button.pack(side="left", expand = True, padx=5, pady=5, fill = "both") 
+        self.remove_button = tk.Button(self.verticeButtons, text="Remover", command=self.remove_vertex)
+        self.remove_button.pack(side="left", expand = True, padx=5, pady=5, fill = "both")
+        #=========================================================================
 
         self.edge_label = tk.Label(master, text="Aresta (Origem-Destino):")
-        self.edge_label.pack(padx = 2, pady = 1, expand = False, fill = "both")
+        self.edge_label.pack(padx = 5, pady = 1, expand = False, fill = "both")
         self.edge_origin_entry = tk.Entry(master)
-        self.edge_origin_entry.pack(padx = 2, pady = 1, expand = False, fill = "both")
+        self.edge_origin_entry.pack(padx = 5, pady = 1, expand = False, fill = "both")
         self.edge_dest_entry = tk.Entry(master)
-        self.edge_dest_entry.pack(padx = 2, pady = 1, expand = False, fill = "both")
+        self.edge_dest_entry.pack(padx = 5, pady = 1, expand = False, fill = "both")
         self.edge_button = tk.Button(master, text="Adicionar Aresta", command=self.add_edge)
-        self.edge_button.pack(padx = 2, pady = 1, expand = False, fill = "both")
+        self.edge_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
 
         self.load_button = tk.Button(master, text="Carregar Grafo", command=self.load_graph)
-        self.load_button.pack(padx = 2, pady = 1, expand = False, fill = "both")
+        self.load_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
 
         self.save_button = tk.Button(master, text="Salvar Grafo", command=self.save_graph)
-        self.save_button.pack(padx = 2, pady = 1, expand = False, fill = "both")
+        self.save_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
 
         self.percorrerV_button = tk.Button(master, text="Percorrer Vertice", command=self.percorrer_vertice)
-        self.percorrerV_button.pack(padx = 2, pady = 1, expand = False, fill = "both")
+        self.percorrerV_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
 
         self.percorrerA_button = tk.Button(master, text="Percorrer Aresta", command=self.percorrer_aresta)
-        self.percorrerA_button.pack(padx = 2, pady = 1, expand = False, fill = "both")
+        self.percorrerA_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
         
         self.log_texto = tk.Text(master, width=40, height=15, state="disabled")
-        self.log_texto.pack(padx = 2, pady = 1, expand = True, fill = "both")
+        self.log_texto.pack(padx = 5, pady = 1, expand = True, fill = "both")
 
         self.draw_graph()
 
     def add_vertex(self):
-        vertex = self.add_entry.get()
+        vertex = self.verticeEntry.get()
         if vertex:
             if vertex in self.graph.nodes():
                 self.printLog(f'Vértice {vertex} já adicionado.')
             else:
                 self.graph.add_node(vertex)
                 self.draw_graph()
-                self.add_entry.delete(0, tk.END)
+                self.verticeEntry.delete(0, tk.END)
                 self.printLog(f'Vértice {vertex} adicionado com sucesso.')
 
     def remove_vertex(self):
-        vertex = self.remove_entry.get()
+        vertex = self.verticeEntry.get()
         if vertex:
             if vertex in self.graph.nodes():
                 self.graph.remove_node(vertex)
@@ -78,7 +85,7 @@ class GraphGUI:
                 self.printLog(f'Vértice {vertex} apagado com sucesso.')
             else:
                 self.printLog('Vértice não encontrado.')
-            self.remove_entry.delete(0, tk.END)
+            self.verticeEntry.delete(0, tk.END)
 
     def percorrer_vertice(self):
         self.printLog('')
