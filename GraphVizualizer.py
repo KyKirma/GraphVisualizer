@@ -57,21 +57,28 @@ class GraphGUI:
         self.edge_button.pack(expand = False, padx = 5, pady = 5, fill = "both")
         #=========================================================================
 
+        #===========================  Save | Load  ===================================
+        self.br = tk.Label(master, text="\nSave | Load", wraplength=200)
+        self.br.pack()
         self.load_button = tk.Button(master, text="Carregar Grafo", command=self.load_graph)
         self.load_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
 
         self.save_button = tk.Button(master, text="Salvar Grafo", command=self.save_graph)
         self.save_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
+        #=========================================================================
 
+        #===========================  Métodos  ===================================
+        self.br = tk.Label(master, text="\nMetodos", wraplength=200)
+        self.br.pack()
         self.percorrerV_button = tk.Button(master, text="Percorrer Vertice", command=self.percorrer_vertice)
         self.percorrerV_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
 
         self.percorrerA_button = tk.Button(master, text="Percorrer Aresta", command=self.percorrer_aresta)
         self.percorrerA_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
-        
+        #=========================================================================
+
         self.log_texto = tk.Text(master, width=40, height=15, state="disabled")
         self.log_texto.pack(padx = 5, pady = 1, expand = True, fill = "both")
-
         self.draw_graph()
 
     def add_vertex(self):
