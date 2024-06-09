@@ -42,16 +42,29 @@ class GraphGUI:
         self.arestaDiv = tk.Frame(master)
         self.arestaDiv.pack(expand = False, fill = "both")
 
-        self.edge_label = tk.Label(self.arestaDiv, text="Aresta (Origem-Destino)")
+        self.edge_label = tk.Label(self.arestaDiv, text="Aresta")
         self.edge_label.pack(padx = 5, pady = 1, expand = False, fill = "both")
 
-        self.arestaEntry = tk.Frame(self.arestaDiv)
-        self.arestaEntry.pack(expand = False, fill = "x")
-
-        self.edge_origin_entry = tk.Entry(self.arestaEntry, justify='center')
+        self.arestaEntry1 = tk.Frame(self.arestaDiv)
+        self.arestaEntry1.pack(expand = False, fill = "x")
+        self.edge_origin_label = tk.Label(self.arestaEntry1, text="Origem: ")
+        self.edge_origin_label.pack(side="left", expand = False, padx = 5, pady = 1)
+        self.edge_origin_entry = tk.Entry(self.arestaEntry1, justify='center')
         self.edge_origin_entry.pack(side="left", expand = True, padx = 5, pady = 1, fill = "both")
-        self.edge_dest_entry = tk.Entry(self.arestaEntry, justify='center')
+
+        self.arestaEntry2 = tk.Frame(self.arestaDiv)
+        self.arestaEntry2.pack(expand = False, fill = "x")
+        self.edge_dest_label = tk.Label(self.arestaEntry2, text="Destino: ")
+        self.edge_dest_label.pack(side="left", expand = False, padx = 5, pady = 1)
+        self.edge_dest_entry = tk.Entry(self.arestaEntry2, justify='center')
         self.edge_dest_entry.pack(side="left", expand = True, padx = 5, pady = 1, fill = "both")
+
+        self.arestaEntry3 = tk.Frame(self.arestaDiv)
+        self.arestaEntry3.pack(expand = False, fill = "x")
+        self.edge_origin_label = tk.Label(self.arestaEntry3, text="     Peso: ")
+        self.edge_origin_label.pack(side="left", expand = False, padx = 5, pady = 1)
+        self.edge_weight_entry = tk.Entry(self.arestaEntry3, justify='center')
+        self.edge_weight_entry.pack(side="left", expand = True, padx = 5, pady = 1, fill = "both")
 
         self.edge_button = tk.Button(self.arestaDiv, text="Adicionar Aresta", command=self.add_edge)
         self.edge_button.pack(expand = False, padx = 5, pady = 5, fill = "both")
