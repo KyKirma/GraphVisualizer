@@ -1,11 +1,12 @@
 import tkinter as tk
+from tkinter import filedialog
+import tkinter.font as tkFont
 import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
-from tkinter import filedialog
 import time
-import tkinter.font as tkFont
+import random
 
 class GraphGUI:
     def __init__(self, master):
@@ -40,6 +41,8 @@ class GraphGUI:
         self.add_button.pack(side="left", expand = True, padx=5, pady=5, fill = "both") 
         self.remove_button = tk.Button(self.verticeButtons, text="Remover", command=self.remove_vertex, font = default_font)
         self.remove_button.pack(side="left", expand = True, padx=5, pady=5, fill = "both")
+        self.removeall_button = tk.Button(master, text="Apagar todos", command=self.remove_Allvertex, font = default_font)
+        self.removeall_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
         #=========================================================================
 
         #===========================  Arestas  ===================================
@@ -85,8 +88,9 @@ class GraphGUI:
         #=========================================================================
 
         #===========================  Métodos  ===================================
-        self.br = tk.Label(master, text="\nMetodos", wraplength=200, font = title_font)
+        self.br = tk.Label(master, text="\nMétodos", wraplength=200, font = title_font)
         self.br.pack()
+
         self.percorrerV_button = tk.Button(master, text="Percorrer Vertice", command=self.percorrer_vertice, font = default_font)
         self.percorrerV_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
 
@@ -119,6 +123,11 @@ class GraphGUI:
             else:
                 self.printLog('Vértice não encontrado.')
             self.verticeEntry.delete(0, tk.END)
+    
+    def remove_Allvertex(self):
+        self.graph.clear()
+        self.draw_graph()
+        self.printLog(f'Grafo apagado.')
 
     def add_edge(self):
         origin = self.edge_origin_entry.get()
@@ -186,7 +195,7 @@ class GraphGUI:
 
     def draw_graph(self):
         self.ax.clear()
-        pos = nx.planar_layout(self.graph)
+        pos = nx.circular_layout(self.graph)
         nx.draw(self.graph, pos, ax=self.ax, with_labels=True, node_size=500, node_color='skyblue')
         self.canvas_ntk.draw()
 
