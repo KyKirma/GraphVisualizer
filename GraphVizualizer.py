@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import time
-import random
+
 
 class GraphGUI:
     def __init__(self, master):
@@ -139,7 +139,7 @@ class GraphGUI:
             self.edge_origin_entry.delete(0, tk.END)
             self.edge_dest_entry.delete(0, tk.END)
             self.edge_weight_entry.delete(0, tk.END)
-            self.printLog(f'Arésta {origin} <--> {dest} criada com sucesso.')
+            self.printLog(f'Arésta {origin} <--> {dest} de peso {peso} criada com sucesso.')
 
     def percorrer_vertice(self):
         self.printLog('')
@@ -152,7 +152,17 @@ class GraphGUI:
                     color_map.append('skyblue')  
             self.ax.clear()
             pos = nx.planar_layout(self.graph)
-            nx.draw(self.graph, pos, ax=self.ax, with_labels=True, node_size=500, node_color=color_map)
+            options = {
+                'node_color': 'skyblue',
+                'node_size': 500,
+                'node_color': color_map
+            }
+
+            labels = dict([((n1, n2), d['weight'])
+                        for n1, n2, d in self.graph.edges(data=True)])
+
+            nx.draw_networkx(self.graph, pos, ax=self.ax, with_labels=True, **options)
+            nx.draw_networkx_edge_labels(self.graph, nx.planar_layout(self.graph), edge_labels = labels)
             self.printLog(f'Vertice {node}')
             self.canvas_ntk.draw()
             self.master.update_idletasks()
@@ -169,12 +179,26 @@ class GraphGUI:
                     color_map.append('black') 
             self.ax.clear()
             pos = nx.planar_layout(self.graph)
-            nx.draw(self.graph, pos, ax=self.ax, with_labels=True, node_size=500, edge_color=color_map, node_color='skyblue')
+            options = {
+                'node_color': 'skyblue',
+                'node_size': 500,
+                'edge_color': color_map
+            }
+
+            labels = dict([((n1, n2), d['weight'])
+                        for n1, n2, d in self.graph.edges(data=True)])
+
+            nx.draw_networkx(self.graph, pos, ax=self.ax, with_labels=True, **options)
+            nx.draw_networkx_edge_labels(self.graph, nx.planar_layout(self.graph), edge_labels = labels)
             self.printLog(f'Arésta {edgeor} <--> {edgedes}')
             self.canvas_ntk.draw()
             self.master.update_idletasks()
             time.sleep(0.3)
         print(self.graph.edges)
+
+    def algoritmo_boruvka(self):
+
+        pass
 
     def load_graph(self):
         filename = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
@@ -195,8 +219,18 @@ class GraphGUI:
 
     def draw_graph(self):
         self.ax.clear()
-        pos = nx.circular_layout(self.graph)
-        nx.draw(self.graph, pos, ax=self.ax, with_labels=True, node_size=500, node_color='skyblue')
+        pos = nx.planar_layout(self.graph)
+
+        options = {
+            'node_color': 'skyblue',
+            'node_size': 500,
+        }
+
+        labels = dict([((n1, n2), d['weight'])
+                    for n1, n2, d in self.graph.edges(data=True)])
+
+        nx.draw_networkx(self.graph, pos, ax=self.ax, with_labels=True,**options)
+        nx.draw_networkx_edge_labels(self.graph, nx.planar_layout(self.graph), edge_labels = labels)
         self.canvas_ntk.draw()
 
     def printLog(self, texto):
