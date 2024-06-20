@@ -15,6 +15,8 @@ class GraphGUI:
         self.master.minsize(800, 400)
         self.graph = nx.Graph()
 
+        self.pos = {}
+
         default_font = tkFont.Font(family="Arial", size=10, weight="normal", slant="roman")
         title_font = tkFont.Font(family="Arial", size=12, weight="normal", slant="roman")
 
@@ -96,6 +98,9 @@ class GraphGUI:
 
         self.percorrerA_button = tk.Button(master, text="Percorrer Aresta", command=self.percorrer_aresta, font = default_font)
         self.percorrerA_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
+
+        self.boruvka_button = tk.Button(master, text="Algorítmo de Boruvka", command=self.algoritmo_boruvka, font = default_font)
+        self.boruvka_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
         #=========================================================================
 
         self.log_texto = tk.Text(master, width=40, height=15, state="disabled")
@@ -151,7 +156,7 @@ class GraphGUI:
                 else:
                     color_map.append('skyblue')  
             self.ax.clear()
-            pos = nx.planar_layout(self.graph)
+
             options = {
                 'node_color': 'skyblue',
                 'node_size': 500,
@@ -161,8 +166,8 @@ class GraphGUI:
             labels = dict([((n1, n2), d['weight'])
                         for n1, n2, d in self.graph.edges(data=True)])
 
-            nx.draw_networkx(self.graph, pos, ax=self.ax, with_labels=True, **options)
-            nx.draw_networkx_edge_labels(self.graph, nx.planar_layout(self.graph), edge_labels = labels)
+            nx.draw_networkx(self.graph, self.pos, ax=self.ax, with_labels=True, **options)
+            nx.draw_networkx_edge_labels(self.graph, self.pos, edge_labels = labels)
             self.printLog(f'Vertice {node}')
             self.canvas_ntk.draw()
             self.master.update_idletasks()
@@ -178,7 +183,7 @@ class GraphGUI:
                 else:
                     color_map.append('black') 
             self.ax.clear()
-            pos = nx.planar_layout(self.graph)
+            
             options = {
                 'node_color': 'skyblue',
                 'node_size': 500,
@@ -188,8 +193,8 @@ class GraphGUI:
             labels = dict([((n1, n2), d['weight'])
                         for n1, n2, d in self.graph.edges(data=True)])
 
-            nx.draw_networkx(self.graph, pos, ax=self.ax, with_labels=True, **options)
-            nx.draw_networkx_edge_labels(self.graph, nx.planar_layout(self.graph), edge_labels = labels)
+            nx.draw_networkx(self.graph, self.pos, ax=self.ax, with_labels=True, **options)
+            nx.draw_networkx_edge_labels(self.graph, self.pos, edge_labels = labels)
             self.printLog(f'Arésta {edgeor} <--> {edgedes}')
             self.canvas_ntk.draw()
             self.master.update_idletasks()
@@ -197,8 +202,29 @@ class GraphGUI:
         print(self.graph.edges)
 
     def algoritmo_boruvka(self):
+        janelaResultado = tk.Toplevel(self.master)
+        figure = plt.figure()
+        ax = figure.add_subplot(111)
+        canvas_ntk = FigureCanvasTkAgg(figure, janelaResultado)
+        canvas_ntk.get_tk_widget().pack(expand=True)
 
-        pass
+        minArvoreG = nx.minimum_spanning_tree(self.graph, algorithm='boruvka')
+        print(minArvoreG)
+        pos = nx.planar_layout(minArvoreG)
+
+        options = {
+            'node_color': 'skyblue',
+            'node_size': 500,
+        }
+
+        labels = dict([((n1, n2), d['weight'])
+                    for n1, n2, d in minArvoreG.edges(data=True)])
+
+        nx.draw_networkx(minArvoreG, pos, ax, with_labels=True,**options)
+        nx.draw_networkx_edge_labels(minArvoreG, nx.planar_layout(minArvoreG), edge_labels = labels)
+        canvas_ntk.draw()
+
+        janelaResultado.deiconify
 
     def load_graph(self):
         filename = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
@@ -220,7 +246,7 @@ class GraphGUI:
 
     def draw_graph(self):
         self.ax.clear()
-        pos = nx.planar_layout(self.graph)
+        self.pos = nx.circular_layout(self.graph)
 
         options = {
             'node_color': 'skyblue',
@@ -230,8 +256,8 @@ class GraphGUI:
         labels = dict([((n1, n2), d['weight'])
                     for n1, n2, d in self.graph.edges(data=True)])
 
-        nx.draw_networkx(self.graph, pos, ax=self.ax, with_labels=True,**options)
-        nx.draw_networkx_edge_labels(self.graph, nx.planar_layout(self.graph), edge_labels = labels)
+        nx.draw_networkx(self.graph, self.pos, ax=self.ax, with_labels=True,**options)
+        nx.draw_networkx_edge_labels(self.graph, self.pos, edge_labels = labels)
         self.canvas_ntk.draw()
 
     def printLog(self, texto):
