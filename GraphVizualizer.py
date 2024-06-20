@@ -204,7 +204,8 @@ class GraphGUI:
         filename = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
         if filename:
             df = pd.read_csv(filename)
-            self.graph = nx.from_pandas_edgelist(df)
+            print(df)
+            self.graph = nx.from_pandas_edgelist(df, edge_attr=["weight"])
             self.draw_graph()
             self.printLog(f'Grafo carregado com sucesso.')
         else:
