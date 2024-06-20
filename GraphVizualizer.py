@@ -203,25 +203,28 @@ class GraphGUI:
 
     def algoritmo_boruvka(self):
         janelaResultado = tk.Toplevel(self.master)
+        janelaResultado.title("Resultado")
         figure = plt.figure()
         ax = figure.add_subplot(111)
         canvas_ntk = FigureCanvasTkAgg(figure, janelaResultado)
         canvas_ntk.get_tk_widget().pack(expand=True)
-
+        plt.title('Resultado - Algorítmo de Boruvka')
         minArvoreG = nx.minimum_spanning_tree(self.graph, algorithm='boruvka')
         print(minArvoreG)
-        pos = nx.planar_layout(minArvoreG)
+        print(minArvoreG.edges)
+        pos = nx.circular_layout(minArvoreG)
 
         options = {
             'node_color': 'skyblue',
             'node_size': 500,
+            'edge_color': 'red'
         }
 
         labels = dict([((n1, n2), d['weight'])
                     for n1, n2, d in minArvoreG.edges(data=True)])
 
-        nx.draw_networkx(minArvoreG, pos, ax, with_labels=True,**options)
-        nx.draw_networkx_edge_labels(minArvoreG, nx.planar_layout(minArvoreG), edge_labels = labels)
+        nx.draw_networkx(minArvoreG, pos, ax, with_labels=True, **options)
+        nx.draw_networkx_edge_labels(minArvoreG, pos, edge_labels = labels)
         canvas_ntk.draw()
 
         janelaResultado.deiconify
