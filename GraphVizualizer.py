@@ -101,6 +101,12 @@ class GraphGUI:
 
         self.boruvka_button = tk.Button(master, text="Algorítmo de Boruvka", command=self.algoritmo_boruvka, font = default_font)
         self.boruvka_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
+        
+        self.boruvka_button = tk.Button(master, text="Algorítmo de Prim", command=self.algoritmo_prim, font = default_font)
+        self.boruvka_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
+        
+        self.boruvka_button = tk.Button(master, text="Algorítmo de Kruskal", command=self.algoritmo_kruskal, font = default_font)
+        self.boruvka_button.pack(padx = 5, pady = 1, expand = False, fill = "both")
         #=========================================================================
 
         self.log_texto = tk.Text(master, width=40, height=15, state="disabled")
@@ -201,6 +207,7 @@ class GraphGUI:
             time.sleep(0.3)
         print(self.graph.edges)
 
+#===========================  Algorítmo de Boruvka  ===================================
     def algoritmo_boruvka(self):
         janelaResultado = tk.Toplevel(self.master)
         janelaResultado.title("Resultado")
@@ -210,6 +217,66 @@ class GraphGUI:
         canvas_ntk.get_tk_widget().pack(expand=True)
         plt.title('Resultado - Algorítmo de Boruvka')
         minArvoreG = nx.minimum_spanning_tree(self.graph, algorithm='boruvka')
+        print(minArvoreG)
+        print(minArvoreG.edges)
+        pos = nx.circular_layout(minArvoreG)
+
+        options = {
+            'node_color': 'skyblue',
+            'node_size': 500,
+            'edge_color': 'red'
+        }
+
+        labels = dict([((n1, n2), d['weight'])
+                    for n1, n2, d in minArvoreG.edges(data=True)])
+
+        nx.draw_networkx(minArvoreG, pos, ax, with_labels=True, **options)
+        nx.draw_networkx_edge_labels(minArvoreG, pos, edge_labels = labels)
+        canvas_ntk.draw()
+
+        janelaResultado.deiconify
+        
+#===========================  Algorítmo de Prim  ===================================
+        
+    def algoritmo_prim(self):
+        janelaResultado = tk.Toplevel(self.master)
+        janelaResultado.title("Resultado")
+        figure = plt.figure()
+        ax = figure.add_subplot(111)
+        canvas_ntk = FigureCanvasTkAgg(figure, janelaResultado)
+        canvas_ntk.get_tk_widget().pack(expand=True)
+        plt.title('Resultado - Algorítmo de Prim')
+        minArvoreG = nx.minimum_spanning_tree(self.graph, algorithm='prim')
+        print(minArvoreG)
+        print(minArvoreG.edges)
+        pos = nx.circular_layout(minArvoreG)
+
+        options = {
+            'node_color': 'skyblue',
+            'node_size': 500,
+            'edge_color': 'red'
+        }
+
+        labels = dict([((n1, n2), d['weight'])
+                    for n1, n2, d in minArvoreG.edges(data=True)])
+
+        nx.draw_networkx(minArvoreG, pos, ax, with_labels=True, **options)
+        nx.draw_networkx_edge_labels(minArvoreG, pos, edge_labels = labels)
+        canvas_ntk.draw()
+
+        janelaResultado.deiconify
+        
+#===========================  Algorítmo de Kruskal  ===================================
+
+    def algoritmo_kruskal(self):
+        janelaResultado = tk.Toplevel(self.master)
+        janelaResultado.title("Resultado")
+        figure = plt.figure()
+        ax = figure.add_subplot(111)
+        canvas_ntk = FigureCanvasTkAgg(figure, janelaResultado)
+        canvas_ntk.get_tk_widget().pack(expand=True)
+        plt.title('Resultado - Algorítmo de Kruskal')
+        minArvoreG = nx.minimum_spanning_tree(self.graph, algorithm='kruskal')
         print(minArvoreG)
         print(minArvoreG.edges)
         pos = nx.circular_layout(minArvoreG)
