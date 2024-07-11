@@ -180,16 +180,16 @@ class GraphGUI:
             time.sleep(0.3)
 
     def percorrer_aresta(self):
+        grafo = self.graph
         self.printLog('')
-        for edgeor, edgedes in self.graph.edges:
+        for edgeor, edgedes in grafo.edges:
             color_map = []
-            for edgeorAlt, edgedesAlt in self.graph.edges:
+            for edgeorAlt, edgedesAlt in grafo.edges:
                 if (edgeor, edgedes) == (edgeorAlt, edgedesAlt):
                     color_map.append('red')
                 else:
                     color_map.append('black') 
             self.ax.clear()
-            
             options = {
                 'node_color': 'skyblue',
                 'node_size': 500,
@@ -197,18 +197,18 @@ class GraphGUI:
             }
 
             labels = dict([((n1, n2), d['weight'])
-                        for n1, n2, d in self.graph.edges(data=True)])
+                        for n1, n2, d in grafo.edges(data=True)])
 
-            nx.draw_networkx(self.graph, self.pos, ax=self.ax, with_labels=True, **options)
-            nx.draw_networkx_edge_labels(self.graph, self.pos, edge_labels = labels)
+            nx.draw_networkx(grafo, self.pos, ax=self.ax, with_labels=True, **options)
+            nx.draw_networkx_edge_labels(grafo, self.pos, edge_labels = labels)
             self.printLog(f'Arésta {edgeor} <--> {edgedes}')
             self.canvas_ntk.draw()
             self.master.update_idletasks()
             time.sleep(0.3)
-        print(self.graph.edges)
 
 #===========================  Algorítmo de Boruvka  ===================================
     def algoritmo_boruvka(self):
+        grafo = self.graph
         janelaResultado = tk.Toplevel(self.master)
         janelaResultado.title("Resultado")
         figure = plt.figure()
@@ -216,7 +216,7 @@ class GraphGUI:
         canvas_ntk = FigureCanvasTkAgg(figure, janelaResultado)
         canvas_ntk.get_tk_widget().pack(expand=True)
         plt.title('Resultado - Algorítmo de Boruvka')
-        minArvoreG = nx.minimum_spanning_tree(self.graph, algorithm='boruvka')
+        minArvoreG = nx.minimum_spanning_tree(grafo, algorithm='boruvka')
         print(minArvoreG)
         print(minArvoreG.edges)
         pos = nx.circular_layout(minArvoreG)
@@ -289,7 +289,9 @@ class GraphGUI:
 
         labels = dict([((n1, n2), d['weight'])
                     for n1, n2, d in minArvoreG.edges(data=True)])
-
+        print(labels)
+        print(self.graph)
+        print(self.graph.edges(data=True))
         nx.draw_networkx(minArvoreG, pos, ax, with_labels=True, **options)
         nx.draw_networkx_edge_labels(minArvoreG, pos, edge_labels = labels)
         canvas_ntk.draw()
@@ -325,7 +327,7 @@ class GraphGUI:
 
         labels = dict([((n1, n2), d['weight'])
                     for n1, n2, d in self.graph.edges(data=True)])
-
+        print(labels)
         nx.draw_networkx(self.graph, self.pos, ax=self.ax, with_labels=True,**options)
         nx.draw_networkx_edge_labels(self.graph, self.pos, edge_labels = labels)
         self.canvas_ntk.draw()
